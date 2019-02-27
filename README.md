@@ -1,0 +1,1 @@
+Simple, incomplete implementation of the iiif manifest api based on the related package

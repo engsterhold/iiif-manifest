@@ -17,10 +17,23 @@ class base_:
 
 
 @related.mutable
+class Annotation(base_):
+    type_ = related.StringField(default="sc:Annotation", key="@type")
+
+
+@related.mutable
+class AnnotationList(base_):
+
+    resources = related.SequenceField(cls=Annotation)
+    type_ = related.StringField(default="sc:AnnotationList", key="@type")
+
+
+@related.mutable
 class Canvas(base_):
     label = related.StringField()
     width = related.IntegerField()
     height = related.IntegerField()
+    otherContent = related.SequenceField(cls=list, required=False)
     type_ = related.StringField(default="sc:Canvas", key="@type")
 
 
