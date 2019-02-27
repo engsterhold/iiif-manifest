@@ -1,59 +1,48 @@
 from typing import List, NamedTuple
-from collections import OrderedDict
-import json
-from dataclasses import dataclass
-import attr
+import related
 
 
-@attr.s
+@related.mutable
 class base_:
-    type_: str = attr.ib()
-    id_: str = attr.ib()
+    type_ = related.StringField(key="@type")
+    id_ = related.StringField(key="@id")
 
-    def to_jsonld(self, context=False):
-        x = attr.asdict(self, recurse=False)
-        for i in x:
-            if i == "type_":
-                x["@type"] = x.pop(i)
-            elif i == "id_":
-                x["@id"] = x.pop(i)
-            elif isinstance(x[i], list):
-                t = []
-                for j in x[i]:
-                    print("YYY", j)
-                    if isinstance(j, base_):
-                        t.append(j.to_jsonld())
-                x[i] = t
-            elif isinstance(x[i], base_):
-                print("XXX", x[i])
-                return x[i].to_jsonld()
-        return x
+    @property
+    def as_json(self):
+        return related.to_json(self)
+
+    @property
+    def as_dict(self):
+        return related.to_dict(self)
 
 
-@attr.s
+@related.mutable
 class Canvas(base_):
-    label: str = attr.ib()
-    height: int = attr.ib()
-    width: int = attr.ib()
-    type_: str = attr.ib(default="canvas")
+    label = related.StringField()
+    width = related.IntegerField()
+    height = related.IntegerField()
+    type_ = related.StringField(default="sc:Canvas", key="@type")
 
 
-@attr.s
+@related.mutable
 class Sequence(base_):
 
-    canvases: List[Canvas] = attr.ib(factory=list)
-    type_: str = attr.ib(default="sequence")
+    canvases = related.SequenceField(cls=Canvas)
+    type_ = related.StringField(default="sc:Sequence", key="@type")
 
 
-@attr.s
+@related.mutable
 class Manifest(base_):
-    label: str = attr.ib()
-    sequences: List[Sequence] = attr.ib(factory=list)
-    type_: str = attr.ib(default="manifest")
+    label = related.StringField()
+    sequences = related.SequenceField(cls=Sequence)
+    type_ = related.StringField(default="sc:Manifest", key="@type")
 
 
 if __name__ == "__main__":
-    m = Manifest(label="My manifest", id_="1", sequences=[
-        Canvas(label="my canvas", id_="2", width=1, height=1), Canvas(label="my canvas 2", id_="3", width=1, height=1)])
+    m = Manifest(label="My manifest", id_="1", sequences=[Sequence(id_="3", canvases=[
+        Canvas(label="my canvas", id_="2", width=1, height=1), Canvas(label="my canvas 2", id_="3", width=1, height=1)])])
 
-    print("out", m.to_jsonld())
+    # mm = Manifest(label="my second manifest", id_="sd")
+
+    print("json", m.as_json)
+    print("dict", m.as_dict)

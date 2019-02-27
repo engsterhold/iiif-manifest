@@ -1,0 +1,4 @@
+.vscode
+.pyenv
+.env*
+.ds_store
