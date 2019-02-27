@@ -1,11 +1,10 @@
-from typing import List, NamedTuple
 import related
 
 
 @related.mutable
 class base_:
     type_ = related.StringField(key="@type")
-    id_ = related.StringField(key="@id")
+    id_ = related.URLField(key="@id")
 
     @property
     def as_json(self):
