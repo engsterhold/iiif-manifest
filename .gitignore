@@ -2,3 +2,7 @@
 .pyenv
 .env*
 .ds_store
+dist
+build
+*.egg-info
+*.pyc

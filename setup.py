@@ -2,10 +2,10 @@ from setuptools import find_packages, setup
 
 setup(
     name='REDE-IIIF-Manifest',
-    version='0.1dev',
+    version='1.1.1',
     packages=find_packages(),
     license='',
     long_description=open('README.md').read(),
-    install_require=['related']
+    install_requires=['related']
 
 )
