@@ -56,5 +56,5 @@ if __name__ == "__main__":
 
     # mm = Manifest(label="my second manifest", id_="sd")
 
-    print("json", m.as_json)
-    print("dict", m.as_dict)
+    print("json:", m.as_json)
+    print("dict:", m.as_dict)
