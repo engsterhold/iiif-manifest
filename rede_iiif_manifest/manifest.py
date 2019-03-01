@@ -3,7 +3,6 @@ import related
 
 @related.mutable
 class base_:
-    type_ = related.StringField(key="@type")
     id_ = related.URLField(key="@id")
 
     @property
@@ -17,7 +16,7 @@ class base_:
 
 @related.mutable
 class Annotation(base_):
-    type_ = related.StringField(default="sc:Annotation", key="@type")
+    type_ = related.StringField(default="oa:Annotation", key="@type")
 
 
 @related.mutable
@@ -28,10 +27,37 @@ class AnnotationList(base_):
 
 
 @related.mutable
+class ImageService():
+    context_ = related.URLField(
+        default="http:iiif.io/api/image/2/context.json", key="@context")
+    profile = related.URLField(
+        default="http://iiif.io/api/image/2/level2.json")
+
+
+@related.mutable
+class ImageResource(base_):
+    service = related.ChildField(ImageService)
+    height = related.IntegerField(required=False)
+    width = related.IntegerField(required=False)
+
+    type_ = related.StringField(default="dctypes:Image", key="@type")
+
+
+@related.mutable
+class Image(Annotation):
+
+    resource = related.ChildField(ImageResource)
+    on = related.URLField()
+    motivation = related.StringField(default="sc:painting")
+    type_ = related.StringField(default="oa:Annotation", key="@type")
+
+
+@related.mutable
 class Canvas(base_):
     label = related.StringField()
     width = related.IntegerField()
     height = related.IntegerField()
+    images = related.SequenceField(cls=Annotation, required=False)
     otherContent = related.SequenceField(cls=list, required=False)
     type_ = related.StringField(default="sc:Canvas", key="@type")
 
@@ -46,7 +72,7 @@ class Sequence(base_):
 @related.mutable
 class Manifest(base_):
     label = related.StringField()
-    sequences = related.SequenceField(cls=Sequence)
+    sequences = related.SequenceField(cls=Sequence, required=False)
     type_ = related.StringField(default="sc:Manifest", key="@type")
 
 
