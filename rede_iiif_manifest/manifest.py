@@ -74,6 +74,8 @@ class Manifest(base_):
     label = related.StringField()
     sequences = related.SequenceField(cls=Sequence, required=False)
     type_ = related.StringField(default="sc:Manifest", key="@type")
+    context_ = related.URLField(
+        default="http://iiif.io/api/presentation/2/context.json", key="@context")
 
 
 if __name__ == "__main__":
