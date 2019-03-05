@@ -29,7 +29,7 @@ class AnnotationList(base_):
 @related.mutable
 class ImageService(base_):
     context_ = related.URLField(
-        default="http:iiif.io/api/image/2/context.json", key="@context")
+        default="http://iiif.io/api/image/2/context.json", key="@context")
     profile = related.URLField(
         default="http://iiif.io/api/image/2/level2.json")
 
